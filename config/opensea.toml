@@ -1,0 +1,44 @@
+# ═══════════════════════════════════════════════════════════════
+# opensea.toml — OpenSea endpoint and authentication config
+# ═══════════════════════════════════════════════════════════════
+
+[opensea]
+# Internal GraphQL endpoint (NOT api.opensea.io)
+graphql_url = "https://gql.opensea.io/graphql"
+
+# Public API for drop lookups (used for fallback)
+public_api_url = "https://api.opensea.io/api/v2"
+
+# SIWE authentication
+[opensea.siwe]
+domain = "opensea.io"
+uri = "https://opensea.io/"          # trailing slash is MANDATORY
+version = "1"
+chain_id = 1                          # always Ethereum for auth
+connector_id = "injected"
+chain_arch = "EVM"
+
+# Required headers for every gql.opensea.io request
+[opensea.headers]
+x-app-id = "os2-web"
+content-type = "application/json"
+origin = "https://opensea.io"
+referer = "https://opensea.io/"
+user-agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+accept = "*/*"
+accept-language = "en-US,en;q=0.9"
+accept-encoding = "gzip, deflate, br"
+
+# Session management
+[opensea.session]
+# Cookie TTL in seconds (~3.5 days)
+cookie_ttl_secs = 302400
+# Refresh cookies this many seconds before expiry
+refresh_threshold_secs = 280800
+
+# GraphQL operation names (must match exactly)
+[opensea.operations]
+drop_by_slug = "dropBySlug"
+swap = "B"                            # Short name for minimal bytes on hot path
+nonce = "GetNonce"
+login = "LoginWithNonce"

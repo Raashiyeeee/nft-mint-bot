@@ -1,0 +1,29 @@
+# Secrets
+.env
+.env.*
+!.env.example
+.fernet_key
+
+# Database/backups
+nftbot_db.sql
+backups/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Rust
+target/
+
+# Old backup/config copies
+*.backup
+*.before-*
+*.pre-fernet-migration
+
+# Logs
+*.log
+
+# OS/editor files
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,76 @@
+[package]
+name = "nft-mint-engine"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "nft-mint-engine"
+path = "src/main.rs"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# HTTP client — HTTP/2 + rustls (no system OpenSSL required)
+reqwest = { version = "0.12", default-features = false, features = ["json", "cookies", "gzip", "http2", "rustls-tls"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Database
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "chrono"] }
+
+# Config parsing
+toml = "0.8"
+
+# Ethereum / crypto — secp256k1 wraps the C library (faster than pure k256)
+secp256k1 = { version = "0.29", features = ["recovery", "rand-std"] }
+hex = "0.4"
+sha3 = "0.10"
+
+# RLP encoding for raw transaction serialization
+rlp = "0.5"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# HTTP server for JSON-RPC IPC with Python bot (hand-rolled dispatcher)
+actix-web = "4"
+
+# URL encoding (for SIWE URI)
+urlencoding = "2"
+
+# Async concurrency utilities
+futures = "0.3"
+
+# Random nonce generation for SIWE
+rand = "0.8"
+
+# Environment variables
+dotenv = "0.15"
+
+# Config file loading
+config = "0.14"
+
+# Error handling
+anyhow = "1.0"
+
+# Fernet decryption (AES-128-CBC + Base64)
+aes = "0.8"
+cbc = { version = "0.1", features = ["block-padding"] }
+cipher = { version = "0.4", features = ["block-padding"] }
+base64 = "0.22"
+
+[build-dependencies]
+# None needed — secp256k1 crate handles its own C compilation
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"

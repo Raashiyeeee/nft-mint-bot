@@ -1,0 +1,3 @@
+-- bootstrap.sql — Database seed script.
+-- Initial admin user is automatically bootstrapped dynamically from ADMIN_TELEGRAM_ID in .env on bot startup.
+-- No static mock data.

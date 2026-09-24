@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════
+# bot.toml — Bot behaviour and performance settings
+# ═══════════════════════════════════════════════════════════════
+
+[bot]
+# Rate limiting
+max_commands_per_minute = 10
+
+# Conversation handler timeout (seconds)
+conversation_timeout_secs = 300
+
+# Max wallets per batch GraphQL query
+max_wallets_per_batch = 50
+
+# Schedule poll interval (seconds)
+schedule_poll_interval_secs = 30
+
+# RPC request timeout (seconds) before failover
+rpc_timeout_secs = 2
+
+[timing]
+# How many seconds before mint to start warm-up phase
+warmup_lead_secs = 5
+
+# How many seconds before mint to start tight calldata retry loop
+calldata_lead_secs = 1.5
+
+# Confirmation polling interval (milliseconds) for non-Base chains
+receipt_poll_interval_ms = 500
+
+# Maximum time to wait for confirmation before giving up (seconds)
+confirmation_timeout_secs = 120
+
+[gas]
+# Gas limit per mint transaction (used in hot path — no estimateGas)
+default_gas_limit = 300000
+
+# Gas multiplier presets
+[gas.multipliers]
+standard = 1.0
+fast = 1.5
+turbo = 2.0
+
+# Default multiplier if user doesn't pick — turbo for competitive drops
+default_multiplier = "turbo"
+
+[opensea]
+# Session cookie TTL refresh threshold (seconds before expiry)
+# 3.5 days = 302400 seconds; refresh 6 hours early
+cookie_refresh_threshold_secs = 280800
+
+[notifications]
+# Whether to DM users on schedule changes
+notify_on_schedule_change = true
+
+# Whether to send a message at T-5 minutes
+notify_warmup = true
+
+# Whether to DM each tx sent confirmation
+notify_tx_sent = true
+
+# Whether to DM final mint results
+notify_confirmed = true

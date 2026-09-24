@@ -1,0 +1,78 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nftbot_db
+      POSTGRES_USER: nftbot
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./telegram-bot/db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./telegram-bot/db/bootstrap.sql:/docker-entrypoint-initdb.d/02_bootstrap.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nftbot -d nftbot_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - botnet
+
+  rust-engine:
+    build:
+      context: ./rust-engine
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://nftbot:${DB_PASSWORD}@postgres:5432/nftbot_db
+      RUST_LOG: info
+      NOTIFICATION_URL: http://telegram-bot:7879/notify
+    volumes:
+      - ./config:/app/config:ro
+    secrets:
+      - fernet_key
+    command: ["/app/docker-entrypoint.sh"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - botnet
+
+  telegram-bot:
+    build:
+      context: ./telegram-bot
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://nftbot:${DB_PASSWORD}@postgres:5432/nftbot_db
+      RUST_ENGINE_URL: http://rust-engine:7878
+    volumes:
+      - ./config:/app/config:ro
+      - ./telegram-bot:/app
+    secrets:
+      - fernet_key
+    command: ["/app/docker-entrypoint.sh"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - botnet
+
+networks:
+  botnet:
+    driver: bridge
+
+volumes:
+  pgdata:
+
+secrets:
+  fernet_key:
+    file: ./.fernet_key
