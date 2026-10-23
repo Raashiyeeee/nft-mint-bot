@@ -13,7 +13,7 @@ Features (all via inline buttons):
   • Delete a user (with private key wipe confirmation)
   • Cancel / back navigation at every step
 
-Access: OWNER_ID (1386285936) only.
+Access: OWNER_ID only.
 """
 import logging
 from datetime import datetime, timezone, timedelta

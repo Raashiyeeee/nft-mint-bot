@@ -62,8 +62,7 @@ if [ ! -f "$REPO_DIR/.env" ]; then
   log "Creating .env from template..."
   cp .env.example .env
   log "⚠️  IMPORTANT: Edit $REPO_DIR/.env before starting the bot!"
-  log "    Required: BOT_TOKEN, DB_PASSWORD, FERNET_KEY"
-  log "    Admin ID 1386285936 is pre-configured."
+  log "    Required: BOT_TOKEN, DB_PASSWORD, FERNET_KEY, ADMIN_TELEGRAM_ID"
 fi
 
 # ── 7. Build and start ───────────────────────────────────────

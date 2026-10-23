@@ -2,7 +2,7 @@
 handlers/admin.py — Admin-only Telegram commands.
 
 Access levels:
-  @owner_only   — Only Telegram ID 1386285936 (the bot owner)
+  @owner_only   — Bot owner (configured via ADMIN_TELEGRAM_ID)
   @admin_only   — Owner OR users in admin_users table
 
 User management commands (/adduser, /removeuser, /makeadmin, /revokeadmin)

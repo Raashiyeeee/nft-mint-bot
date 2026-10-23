@@ -5,10 +5,11 @@ Every bot command must pass through check_authorized() before executing.
 Unauthorized attempts are logged to denied_access_log.
 Rate limit: max 10 commands per minute per telegram_id.
 
-Owner: 1386285936 — the only user who can manage other admins/users.
+Owner: loaded from ADMIN_TELEGRAM_ID — the only user who can manage other admins/users.
 """
 import functools
 import logging
+import os
 from typing import Callable, Optional
 
 from telegram import Update
@@ -18,9 +19,9 @@ from db import queries
 
 logger = logging.getLogger(__name__)
 
-# ── Hard-coded owner ──────────────────────────────────────────────────────────
+# ── Owner configured via environment ──────────────────────────────────────────
 # Only this Telegram ID can add/remove users and promote/revoke admins.
-OWNER_ID: int = 1386285936
+OWNER_ID: int = int(os.getenv("ADMIN_TELEGRAM_ID", "0"))
 
 DENIED_MESSAGE       = "⛔ You are not authorized to use this bot. Contact the admin."
 OWNER_ONLY_MESSAGE   = "⛔ This command is restricted to the bot owner only."
